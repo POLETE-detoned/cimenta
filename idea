@@ -1,0 +1,29 @@
+Es un marketplace B2B de licitación privada para el sector AECO que digitaliza y estandariza la contratación de obras entre promotores/arquitectos (demanda) y constructoras cualificadas (oferta), sustituyendo el intercambio caótico de presupuestos por un proceso estructurado en cinco fases:
+
+**1. Publicación de la Licitación (*Teaser Card*)**
+
+* El promotor o arquitecto sube el proyecto con sus mediciones en formato estándar interoperable (`.bc3` ciego) y planos técnicos.
+* La plataforma publica una ficha anónima visual (estilo *Urbanitae*) con métricas clave: municipio, tipología, m² construidos, plazo estimado y presupuesto objetivo (€/m²), protegiendo la confidencialidad de la propiedad.
+
+**2. Desbloqueo del Data Room con Cupo Cerrado**
+
+* Se limita la participación a un máximo de **3 a 5 constructoras** por proyecto para garantizar a los licitadores una probabilidad matemática real de adjudicación (20% – 33%).
+* La constructora abona un *fee* de acceso (ej. 150 €) para descargar la documentación técnica completa con trazabilidad y marcas de agua forenses.
+
+**3. Mesa de Oferta Técnico-Económica**
+
+* No es una subasta a la baja; la constructora cotiza partida a partida sobre la medición ciega completando dos variables obligatorias:
+* **Precio unitario (€/ud)**.
+* **Nombre del fabricante y marca comercial** del material a instalar (o ficha técnica de una alternativa equivalente).
+
+
+
+**4. Matriz Comparativa y Adjudicación Digital**
+
+* El arquitecto/promotor audita una matriz automática que compara las ofertas en paralelo, alertando de bajas temerarias (>20%) y cambios de prescripción técnica.
+* Al elegir al adjudicatario, la plataforma compila el contrato de obra para su firma digital (eIDAS) y cobra la comisión de intermediación.
+* Las constructoras no seleccionadas reciben el **reembolso automático del 100% de su depósito** en su balance interno al cierre de la firma.
+
+**5. Retención Post-Adjudicación**
+
+* Ambas partes gestionan la ejecución en la plataforma mediante la validación de certificaciones mensuales de avance sobre el árbol del `.bc3`, control de marcas instaladas y custodia de la fianza legal de garantía (5%).

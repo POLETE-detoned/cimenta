@@ -1,0 +1,729 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Cimenta showreel</title>
+<link rel="stylesheet" href="fonts.css">
+<style>
+:root{
+  --bg:#0A1122; --bg2:#0E1830; --ink:#0F172A; --s700:#334155; --s600:#475569; --s500:#64748B;
+  --s400:#94A3B8; --s300:#CBD5E1; --s200:#E2E8F0; --s100:#F1F5F9; --s50:#F8FAFC;
+  --blue:#1E40AF; --btn:#23359A; --glow:#5B7CFF; --best:#059669; --adj:#D97706; --worst:#DC2626;
+  --sans:'Inter',system-ui,sans-serif; --mono:'JetBrains Mono',ui-monospace,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:1920px;height:1080px;overflow:hidden;background:#000}
+body{font-family:var(--sans);color:#fff;-webkit-font-smoothing:antialiased}
+#stage{position:absolute;inset:0;width:1920px;height:1080px;overflow:hidden;background:var(--bg)}
+.abs{position:absolute}
+.mono{font-family:var(--mono)}
+.scene{position:absolute;inset:0;will-change:opacity,transform}
+.label{font-family:var(--mono);font-size:20px;letter-spacing:.22em;text-transform:uppercase;color:var(--s400)}
+.label b{color:var(--glow);font-weight:500}
+.h1{font-weight:600;letter-spacing:-.025em;line-height:1.04}
+.w{display:inline-block;will-change:transform,opacity}
+.card{background:#fff;border-radius:18px;color:var(--ink);box-shadow:0 30px 80px rgba(0,0,0,.45),0 0 0 1px rgba(255,255,255,.04)}
+.chip{display:inline-flex;align-items:center;gap:8px;border-radius:999px;padding:6px 14px;font-size:15px;font-weight:500}
+.tab{font-variant-numeric:tabular-nums}
+
+/* fondo */
+#grid{position:absolute;inset:-80px;background-image:
+  linear-gradient(rgba(148,163,184,.07) 1px,transparent 1px),
+  linear-gradient(90deg,rgba(148,163,184,.07) 1px,transparent 1px);
+  background-size:80px 80px}
+#glow1,#glow2{position:absolute;border-radius:50%;filter:blur(120px)}
+#glow1{width:900px;height:900px;background:rgba(40,70,200,.30)}
+#glow2{width:700px;height:700px;background:rgba(30,64,175,.22)}
+#vig{position:absolute;inset:0;background:radial-gradient(ellipse at center,transparent 45%,rgba(3,6,15,.75) 100%)}
+
+/* logo */
+.logo{display:flex;align-items:center}
+.logo .sq{border:3px solid #fff;display:flex;align-items:center;justify-content:center}
+.logo .sq i{display:block;background:#fff}
+.logo .wm{font-weight:600;letter-spacing:.2em;color:#fff}
+
+/* s1 docs */
+.doc{position:absolute;width:340px;height:210px;background:#F8FAFC;border-radius:12px;color:var(--ink);padding:20px 22px;box-shadow:0 20px 50px rgba(0,0,0,.5)}
+.doc .ty{position:absolute;top:18px;left:22px;font:600 13px var(--mono);color:#fff;border-radius:6px;padding:4px 8px}
+.doc .nm{position:absolute;top:20px;left:84px;right:18px;font:500 15px var(--mono);color:var(--s600);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.doc .ln{position:absolute;left:22px;height:9px;border-radius:5px;background:var(--s200)}
+.doc .tt{position:absolute;left:22px;bottom:20px;font:700 28px var(--mono);color:var(--ink)}
+.doc .q{position:absolute;right:20px;bottom:14px;font:700 44px var(--sans);color:var(--worst);transform:rotate(-8deg)}
+
+/* s2 */
+.pc{position:absolute;top:250px;width:470px;height:470px;background:rgba(255,255,255,.04);border:1px solid rgba(148,163,184,.25);border-radius:20px;padding:34px}
+.pc h3{font-size:30px;font-weight:600}
+.pc .fmt{margin-top:12px}
+.pc .row{display:flex;justify-content:space-between;align-items:baseline;border-top:1px solid rgba(148,163,184,.18);padding:18px 0;font-size:21px;color:var(--s300)}
+.pc .row b{font:600 26px var(--mono);color:#fff}
+.pc .row b.hl{color:#FCA5A5}
+.neq{position:absolute;top:430px;font:300 110px var(--sans);color:var(--worst)}
+
+/* tabla medición */
+table{border-collapse:collapse;width:100%}
+.tb th{font:500 13px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--s500);text-align:left;padding:12px 14px;border-bottom:1px solid var(--s200)}
+.tb td{font-size:18px;padding:0 14px;height:62px;border-bottom:1px solid var(--s100);color:var(--s700);white-space:nowrap}
+.tb td.c{font:500 15px var(--mono);color:var(--s500)}
+.tb td.n{font:500 18px var(--mono);text-align:right;color:var(--ink)}
+.tb th.n{text-align:right}
+.cell{height:40px;border-radius:8px;display:flex;align-items:center;justify-content:flex-end;padding:0 12px;font:500 17px var(--mono)}
+.cell.t{justify-content:flex-start;font:500 16px var(--sans)}
+
+/* pasos */
+.stxt{position:absolute;left:120px;top:250px;width:560px}
+.stxt .num{font:500 22px var(--mono);letter-spacing:.14em;color:var(--glow)}
+.stxt .role{margin-left:16px;font:500 14px var(--mono);letter-spacing:.16em;color:var(--s300);border:1px solid rgba(148,163,184,.35);border-radius:999px;padding:5px 12px;vertical-align:3px}
+.stxt h2{margin-top:26px;font-size:72px;font-weight:600;letter-spacing:-.03em;line-height:1.02}
+.stxt p{margin-top:28px;font-size:28px;line-height:1.45;color:var(--s300)}
+#pbar{position:absolute;left:120px;bottom:64px;width:1680px;display:flex;gap:14px}
+#pbar .seg{flex:1}
+#pbar .tr{height:4px;border-radius:2px;background:rgba(148,163,184,.2);overflow:hidden}
+#pbar .fl{height:100%;background:var(--glow);width:0}
+#pbar .lb{margin-top:14px;font:500 16px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--s500)}
+.vis{position:absolute;left:760px;top:140px;width:1040px;height:780px}
+
+/* tarjeta licitación */
+.tc{position:absolute;left:0;top:0;width:590px;overflow:hidden}
+.tc .img{height:300px;background:url(obra.jpg) center/cover;position:relative}
+.tc .bdg{position:absolute;top:16px;font-size:14px;font-weight:500;border-radius:999px;padding:5px 12px}
+.tc .body{padding:22px 24px 24px}
+.tc h4{font-size:24px;font-weight:600}
+.tc .mun{font-size:17px;color:var(--s500);margin-top:4px}
+.tc .mx{margin-top:18px;display:grid;grid-template-columns:1fr 1fr 1fr;border:1px solid var(--s200);border-radius:12px}
+.tc .mx div{padding:12px 14px;border-left:1px solid var(--s200)}
+.tc .mx div:first-child{border-left:0}
+.tc .mx b{display:block;font:500 20px var(--mono);color:var(--ink);white-space:nowrap}
+.tc .mx span{font-size:13px;color:var(--s500)}
+.tc .pl{margin-top:14px;font-size:15px;color:var(--s500)}
+.slots{display:flex;gap:6px;margin-top:8px}
+.slots i{flex:1;height:6px;border-radius:3px;background:var(--s200);position:relative;overflow:hidden}
+.slots i u{position:absolute;inset:0;background:var(--btn);transform-origin:left}
+.btn{display:flex;align-items:center;justify-content:center;gap:10px;border-radius:10px;background:var(--btn);color:#fff;font-weight:600;font-size:17px;height:52px}
+.callout{position:absolute;left:670px;width:370px}
+.callout .ln{position:absolute;left:-80px;top:14px;height:2px;width:66px;background:var(--glow);transform-origin:left}
+.callout .dt{position:absolute;left:-88px;top:9px;width:12px;height:12px;border-radius:50%;background:var(--glow);box-shadow:0 0 0 6px rgba(91,124,255,.2)}
+.callout h5{font-size:26px;font-weight:600}
+.callout p{font-size:19px;color:var(--s400);margin-top:6px;line-height:1.4}
+
+/* paso 2 */
+.tok{position:absolute;top:0;width:132px;text-align:center}
+.tok .cc{width:100px;height:100px;margin:0 auto;border-radius:50%;display:flex;align-items:center;justify-content:center;font:600 28px var(--sans);color:#fff;background:var(--btn);border:2px solid rgba(255,255,255,.2)}
+.tok .cc.free{background:transparent;border:2px dashed var(--s500);color:var(--s500)}
+.tok span{display:block;margin-top:14px;font-size:15px;color:var(--s300);line-height:1.3}
+
+/* matriz */
+.mt td,.mt th{padding:0 10px}
+.mt th{font:500 13px var(--mono);color:var(--s500);text-align:right;height:38px;letter-spacing:.04em}
+.mt th:first-child{text-align:left}
+.mt td{height:50px;border-top:1px solid var(--s100);font-size:16px;color:var(--s700)}
+.mt .cl{border-radius:7px;height:36px;display:flex;align-items:center;justify-content:flex-end;padding:0 10px;font:500 16px var(--mono)}
+.g{background:#ECFDF5;color:#065F46}.a{background:#FFFBEB;color:#92400E}.r{background:#FEF2F2;color:#991B1B}
+
+/* modelo */
+.mcard{position:absolute;top:360px;width:520px;height:390px;border-radius:20px;background:rgba(255,255,255,.035);border:1px solid rgba(148,163,184,.22);padding:40px}
+.mcard .n{font:500 22px var(--mono);color:var(--glow);letter-spacing:.1em}
+.mcard h3{font-size:40px;font-weight:600;margin-top:26px;letter-spacing:-.02em;line-height:1.1}
+.mcard p{font-size:23px;color:var(--s300);margin-top:18px;line-height:1.45}
+.mcard .tg{position:absolute;right:28px;top:34px;font:500 13px var(--mono);letter-spacing:.14em;color:var(--adj);border:1px solid rgba(217,119,6,.5);border-radius:999px;padding:5px 12px}
+
+/* producto */
+.browser{position:absolute;left:120px;top:280px;width:1100px;border-radius:14px;overflow:hidden;background:#fff;box-shadow:0 40px 90px rgba(0,0,0,.55)}
+.browser .bar{height:44px;background:#EEF1F5;display:flex;align-items:center;padding:0 16px;gap:8px}
+.browser .bar i{width:12px;height:12px;border-radius:50%}
+.browser .url{margin-left:24px;flex:1;height:28px;border-radius:8px;background:#fff;font:400 14px var(--mono);color:var(--s500);display:flex;align-items:center;padding-left:14px}
+.stat{position:absolute;left:1300px;width:520px}
+.stat b{font:600 64px var(--sans);letter-spacing:-.03em}
+.stat span{display:block;font-size:22px;color:var(--s300);margin-top:2px}
+</style>
+</head>
+<body>
+<div id="stage">
+  <div id="bgwrap" class="abs" style="inset:0">
+    <div id="grid"></div><div id="glow1"></div><div id="glow2"></div><div id="vig"></div>
+  </div>
+
+  <!-- S1 · gancho -->
+  <div id="s1" class="scene">
+    <div id="docs"></div>
+    <div id="s1shade" class="abs" style="inset:0;background:radial-gradient(ellipse 60% 45% at center,rgba(10,17,34,.92) 30%,rgba(10,17,34,0) 100%)"></div>
+    <div id="s1lab" class="label abs" style="left:0;right:0;top:360px;text-align:center">El problema</div>
+    <div class="h1 abs" style="left:0;right:0;top:420px;text-align:center;font-size:104px">
+      <div id="s1a"></div><div id="s1b" style="margin-top:6px"></div>
+    </div>
+  </div>
+
+  <!-- S2 · problema -->
+  <div id="s2" class="scene">
+    <div class="label abs" id="s2lab" style="left:120px;top:140px">Hoy · <b>tres presupuestos, tres mediciones</b></div>
+    <div id="pcs"></div>
+    <div id="neq1" class="neq" style="left:588px">≠</div>
+    <div id="neq2" class="neq" style="left:1118px">≠</div>
+    <div class="abs" style="left:120px;top:800px;font-size:48px;font-weight:600;letter-spacing:-.02em">
+      <span id="s2c1">Cada constructora mide a su manera.</span>
+      <span id="s2c2" style="color:#FCA5A5">Nada compara con nada.</span>
+    </div>
+  </div>
+
+  <!-- S3 · revelado -->
+  <div id="s3" class="scene">
+    <div id="ring" class="abs" style="left:960px;top:470px;width:10px;height:10px;border-radius:50%;border:2px solid var(--glow)"></div>
+    <div class="abs" style="left:0;right:0;top:380px;display:flex;justify-content:center;align-items:center;gap:48px">
+      <svg id="s3sq" width="150" height="150" viewBox="0 0 150 150">
+        <rect id="s3rect" x="5" y="5" width="140" height="140" fill="none" stroke="#fff" stroke-width="10" stroke-dasharray="560" stroke-dashoffset="560"/>
+        <rect id="s3in" x="52" y="52" width="46" height="46" fill="#fff"/>
+      </svg>
+      <div id="s3wm" style="font-size:150px;font-weight:600;color:#fff;line-height:1;width:930px;white-space:nowrap"></div>
+    </div>
+    <div id="s3sub" class="abs" style="left:0;right:0;top:600px;text-align:center;font-size:44px;color:var(--s300);letter-spacing:-.01em">Marketplace B2B de licitación privada de obra.</div>
+    <div id="s3tag" class="label abs" style="left:0;right:0;top:690px;text-align:center">Promotores · Arquitectos · Constructoras</div>
+  </div>
+
+  <!-- S4 · la idea -->
+  <div id="s4" class="scene">
+    <div class="abs" style="left:120px;top:250px;width:640px">
+      <div id="s4lab" class="label">La idea</div>
+      <div class="h1" style="font-size:86px;margin-top:26px"><div id="s4a">Una sola medición.</div><div id="s4b" style="color:var(--glow)">La del promotor.</div></div>
+      <p id="s4p" style="margin-top:36px;font-size:29px;line-height:1.45;color:var(--s300)">Todas las constructoras ofertan sobre las mismas cantidades. La comparativa sale sola.</p>
+    </div>
+    <div id="s4card" class="card abs" style="left:820px;top:210px;width:980px;padding:26px 26px 18px">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+        <div id="s4file" class="chip mono" style="background:#EFF3FF;color:var(--blue);font-size:15px">▤ Mediciones_Ciegas.bc3 · FIEBDC-3</div>
+        <div id="s4lock" class="chip" style="background:var(--s100);color:var(--s600)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" style="vertical-align:-1px"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg> Medición congelada al publicar</div>
+      </div>
+      <table class="tb"><thead><tr><th style="width:90px">Código</th><th>Partida</th><th style="width:50px">Ud</th><th class="n" style="width:140px">Medición</th><th class="n" style="width:130px">Precio</th><th style="width:170px">Marca</th></tr></thead>
+      <tbody id="s4rows"></tbody></table>
+      <div id="s4hl" class="abs" style="left:640px;top:70px;width:318px;height:440px;border:3px dashed var(--glow);border-radius:14px"></div>
+      <div id="s4hlt" class="abs chip" style="left:652px;top:520px;background:var(--glow);color:#fff;font-size:16px">Lo único que aporta la constructora</div>
+      <div id="s4mc" class="abs" style="left:470px;top:70px;width:170px;height:440px;background:rgba(30,64,175,.06);border-radius:10px"></div>
+    </div>
+  </div>
+
+  <!-- S5 · pasos -->
+  <div id="s5" class="scene">
+    <div id="stxts"></div>
+    <div id="v1" class="vis">
+      <div id="tc" class="tc card">
+        <div id="tcimg" class="img">
+        </div>
+        <div class="body">
+          <div class="mono" style="font-size:13px;color:var(--s500)">LIC-2026-0412</div>
+          <h4>Edificio plurifamiliar 12 viviendas</h4>
+          <div class="mun">Torrevieja · Alicante</div>
+          <div class="mx">
+            <div><b id="m1">0 €</b><span>Presupuesto objetivo</span></div>
+            <div><b id="m2">0 m²</b><span>Superficie</span></div>
+            <div><b id="m3">0 €/m²</b><span>Ratio</span></div>
+          </div>
+          <div class="pl">◷ 20 meses plazo &nbsp;|&nbsp; Inicio: enero 2027</div>
+          <div style="margin-top:16px;display:flex;justify-content:space-between;font-size:15px"><span style="color:var(--s600)">1 de 5 plazas cubiertas</span><span style="color:var(--s500)">Cierre en 11 días</span></div>
+          <div class="slots" id="tcslots"><i><u></u></i><i><u></u></i><i><u></u></i><i><u></u></i><i><u></u></i></div>
+          <div id="tcbtn" class="btn" style="margin-top:18px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" style="vertical-align:-1px"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg> Desbloquear data room y .BC3 (500 € reembolsable)</div>
+        </div>
+      </div>
+      <div id="co1" class="callout" style="top:70px"><div class="dt"></div><div class="ln"></div><h5>Ficha anónima</h5><p>La propiedad no se revela. Solo municipio, tipología y superficie.</p></div>
+      <div id="co2" class="callout" style="top:300px"><div class="dt"></div><div class="ln"></div><h5>Objetivo en €/m²</h5><p>Presupuesto, plazo y ratio visibles antes de entrar.</p></div>
+      <div id="co3" class="callout" style="top:530px"><div class="dt"></div><div class="ln"></div><h5>.BC3 ciego adjunto</h5><p>Medición estándar FIEBDC-3, interoperable con Presto, CYPE y Arquímedes.</p></div>
+    </div>
+
+    <div id="v2" class="vis">
+      <div id="v2top" class="abs" style="left:0;top:0;width:1040px;height:330px;border-radius:20px;background:rgba(255,255,255,.035);border:1px solid rgba(148,163,184,.22)">
+        <div class="label abs" style="left:36px;top:30px;font-size:16px">Cupo cerrado · 4 de 5 plazas</div>
+        <div id="toks" class="abs" style="left:26px;top:88px;width:780px;height:200px"></div>
+        <div class="abs" style="left:750px;top:92px;width:260px;text-align:right;white-space:nowrap">
+          <div id="prob" style="font:600 62px var(--sans);letter-spacing:-.03em;color:#fff">20–33 %</div>
+          <div style="font-size:18px;color:var(--s300);margin-top:8px;line-height:1.35">probabilidad real de adjudicación</div>
+        </div>
+      </div>
+      <div id="v2fee" class="card abs" style="left:0;top:370px;width:420px;height:380px;padding:30px;background:var(--ink);color:#fff;box-shadow:0 0 0 1px rgba(148,163,184,.25)">
+        <div class="mono" style="font-size:14px;letter-spacing:.14em;color:var(--s400)">FEE DE ACCESO</div>
+        <div class="mono" style="font-size:56px;font-weight:500;margin-top:14px">500,00 €</div>
+        <div style="font-size:19px;color:var(--s300);margin-top:14px;line-height:1.45">Se devuelve a tu balance al presentar la oferta técnica en plazo.</div>
+        <div id="v2btn" class="btn abs" style="left:30px;right:30px;bottom:30px;height:60px;font-size:19px">Pagar 500 € y desbloquear</div>
+      </div>
+      <div id="v2docs" class="card abs" style="left:450px;top:370px;width:590px;height:380px;padding:30px;overflow:hidden">
+        <div class="mono" style="font-size:14px;letter-spacing:.14em;color:var(--s500)">DATA ROOM</div>
+        <div id="docrows" style="margin-top:12px"></div>
+        <div id="wmk" class="chip mono" style="position:absolute;left:30px;bottom:26px;background:#EFF3FF;color:var(--blue);font-size:14px">Marca de agua forense · descarga trazable</div>
+      </div>
+    </div>
+
+    <div id="v3" class="vis">
+      <div id="bidcard" class="card abs" style="left:0;top:0;width:1040px;height:760px;overflow:hidden">
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:26px 28px 10px">
+          <div><div class="mono" style="font-size:13px;color:var(--s500)">LIC-2026-0412 · MESA DE OFERTAS</div><div style="font-size:26px;font-weight:600;margin-top:4px">Presupuesto partida a partida</div></div>
+          <div id="bcchip" class="chip" style="background:#ECFDF5;color:#065F46">✓ .BC3 importado · 412 partidas casadas</div>
+        </div>
+        <table class="tb" style="margin:0 14px;width:1012px"><thead><tr><th style="width:70px">Cód.</th><th>Partida</th><th class="n" style="width:110px">Medición</th><th class="n" style="width:140px">Precio unit.</th><th class="n" style="width:150px">Importe</th><th style="width:230px">Marca y fabricante</th></tr></thead>
+        <tbody id="bidrows"></tbody></table>
+        <div class="abs" style="left:0;right:0;bottom:0;height:110px;background:var(--ink);color:#fff;display:flex;align-items:center;padding:0 28px;gap:36px">
+          <div><div class="mono" style="font-size:12px;letter-spacing:.14em;color:var(--s400)">TOTAL OFERTA</div><div id="btot" class="mono tab" style="font-size:34px;font-weight:500;margin-top:4px">0,00 €</div></div>
+          <div><div class="mono" style="font-size:12px;letter-spacing:.14em;color:var(--s400)">PRESUPUESTO BASE</div><div class="mono" style="font-size:20px;margin-top:8px;color:var(--s300)">1.480.000,00 €</div></div>
+          <div id="bdev" class="chip mono" style="background:rgba(5,150,105,.18);color:#6EE7B7">−4,2 % sobre PBL</div>
+          <div id="bsend" class="btn" style="margin-left:auto;padding:0 24px;background:#3B5BDB">✓ Firmar y enviar oferta</div>
+        </div>
+      </div>
+    </div>
+
+    <div id="v4" class="vis">
+      <div id="mxcard" class="card abs" style="left:0;top:0;width:1040px;height:760px;padding:26px 28px;overflow:hidden">
+        <div style="display:flex;justify-content:space-between;align-items:baseline"><div style="font-size:26px;font-weight:600">Matriz comparativa</div><div class="mono" style="font-size:13px;color:var(--s500)">4 OFERTAS · MISMA MEDICIÓN</div></div>
+        <div id="bars" class="abs" style="left:28px;right:28px;top:66px;height:200px"></div>
+        <table class="mt abs" style="left:28px;top:286px;width:984px"><thead><tr><th>Partida</th><th>C. Alfa</th><th>G. Beta</th><th>C. Delta</th><th>E. Levante</th></tr></thead><tbody id="mxrows"></tbody></table>
+        <div id="alert" class="abs" style="left:28px;right:28px;top:592px;height:62px;border-radius:10px;background:#FEF2F2;color:#991B1B;display:flex;align-items:center;padding:0 18px;font-size:17px;gap:10px"><b>⚠︎</b> Constructora Delta: baja del 22,8 % sobre la media. Requiere justificación antes de adjudicar.</div>
+        <div id="award" class="btn abs" style="left:28px;right:28px;top:670px;height:62px;background:var(--best);font-size:19px">Adjudicar a Construcciones Alfa y generar contrato</div>
+      </div>
+      <div id="contract" class="card abs" style="left:520px;top:250px;width:500px;padding:30px;background:#fff">
+        <div class="mono" style="font-size:13px;letter-spacing:.14em;color:var(--s500)">CONTRATO DE OBRA</div>
+        <div style="font-size:24px;font-weight:600;margin-top:10px">Edificio plurifamiliar 12 viviendas</div>
+        <div style="font-size:18px;color:var(--s600);margin-top:6px">Construcciones Alfa · <span class="mono">1.417.840,00 €</span></div>
+        <div id="sig" class="chip" style="margin-top:20px;background:#ECFDF5;color:#065F46;font-size:17px">✓ Firmado con eIDAS</div>
+        <div id="refund" style="margin-top:16px;font-size:17px;color:var(--s600);border-top:1px solid var(--s200);padding-top:14px">↺ 3 fees de 500 € devueltos a las demás ofertantes</div>
+      </div>
+    </div>
+
+    <div id="v5" class="vis">
+      <div id="certcard" class="card abs" style="left:0;top:20px;width:620px;height:600px;padding:30px">
+        <div class="mono" style="font-size:13px;letter-spacing:.14em;color:var(--s500)">CERTIFICACIONES MENSUALES</div>
+        <div style="display:flex;align-items:baseline;gap:14px;margin-top:8px"><div id="cpct" class="mono" style="font-size:52px;font-weight:500">0 %</div><div style="font-size:18px;color:var(--s500)">avance certificado sobre el árbol .BC3</div></div>
+        <div id="cbars" class="abs" style="left:30px;right:30px;top:170px;height:280px"></div>
+        <div id="cval" class="abs" style="left:30px;right:30px;bottom:30px;height:56px;border-radius:10px;background:var(--s50);border:1px solid var(--s200);display:flex;align-items:center;padding:0 16px;font-size:17px;gap:10px;color:var(--s700)"><span class="mono" style="color:var(--s500)">CERT. 07</span> julio · <span class="mono">118.240,50 €</span><span style="margin-left:auto;color:var(--best);font-weight:600">✓ Validada</span></div>
+      </div>
+      <div id="fzcard" class="card abs" style="left:650px;top:20px;width:390px;height:285px;padding:30px;background:var(--ink);color:#fff;box-shadow:0 0 0 1px rgba(148,163,184,.25)">
+        <div class="mono" style="font-size:13px;letter-spacing:.14em;color:var(--s400)">FIANZA DE GARANTÍA · 5 %</div>
+        <div id="fz" class="mono" style="font-size:40px;font-weight:500;margin-top:18px">0,00 €</div>
+        <div style="font-size:18px;color:var(--s300);margin-top:12px;line-height:1.4">En custodia hasta la recepción de la obra.</div>
+      </div>
+      <div id="mkcard" class="card abs" style="left:650px;top:335px;width:390px;height:285px;padding:30px">
+        <div class="mono" style="font-size:13px;letter-spacing:.14em;color:var(--s500)">MARCAS INSTALADAS</div>
+        <div id="mk" class="mono" style="font-size:40px;font-weight:500;margin-top:18px">0 / 38</div>
+        <div style="font-size:18px;color:var(--s500);margin-top:10px">verificadas contra la oferta</div>
+        <div style="margin-top:22px;height:8px;border-radius:4px;background:var(--s200);overflow:hidden"><div id="mkb" style="height:100%;background:var(--best);width:0"></div></div>
+      </div>
+    </div>
+
+    <div id="pbar"></div>
+  </div>
+
+  <!-- S6 · modelo -->
+  <div id="s6" class="scene">
+    <div class="abs" style="left:120px;top:150px">
+      <div id="s6lab" class="label">Modelo de negocio</div>
+      <div id="s6h" class="h1" style="font-size:80px;margin-top:22px">Tres fuentes de ingreso por obra.</div>
+    </div>
+    <div id="mc1" class="mcard" style="left:120px"><div class="n">01 /</div><h3>Comisión de intermediación</h3><p>Sobre el importe adjudicado, al firmar el contrato de obra.</p></div>
+    <div id="mc2" class="mcard" style="left:700px"><div class="n">02 /</div><h3>Fee de acceso al data room</h3><p>500 € por plaza. Se retiene si la constructora no presenta oferta.</p></div>
+    <div id="mc3" class="mcard" style="left:1280px"><div class="tg">ROADMAP</div><div class="n">03 /</div><h3>Servicios de ejecución</h3><p>Certificaciones, control de marcas y custodia de la fianza del 5 %.</p></div>
+    <div id="flow" class="abs" style="left:120px;top:810px;width:1680px;height:60px">
+      <div id="flowl" class="abs" style="left:260px;top:28px;height:2px;width:1160px;background:var(--glow);transform-origin:left"></div>
+      <div id="fn1" class="abs mono" style="left:0;width:520px;text-align:center;top:0;font-size:18px;letter-spacing:.14em;color:var(--s300)"><span style="background:var(--bg);padding:14px 18px;display:inline-block">LICITACIÓN</span></div>
+      <div id="fn2" class="abs mono" style="left:580px;width:520px;text-align:center;top:0;font-size:18px;letter-spacing:.14em;color:var(--s300)"><span style="background:var(--bg);padding:14px 18px;display:inline-block">ADJUDICACIÓN</span></div>
+      <div id="fn3" class="abs mono" style="left:1160px;width:520px;text-align:center;top:0;font-size:18px;letter-spacing:.14em;color:var(--s300)"><span style="background:var(--bg);padding:14px 18px;display:inline-block">EJECUCIÓN</span></div>
+    </div>
+  </div>
+
+  <!-- S7 · producto -->
+  <div id="s7" class="scene">
+    <div class="abs" style="left:120px;top:140px">
+      <div id="s7lab" class="label">Estado · beta funcional</div>
+      <div id="s7h" class="h1" style="font-size:80px;margin-top:22px">No es un render. <span style="color:var(--glow)">Es la beta.</span></div>
+    </div>
+    <div id="browser" class="browser">
+      <div class="bar"><i style="background:#F87171"></i><i style="background:#FBBF24"></i><i style="background:#34D399"></i><div class="url">cimenta.abarceloarquitecto.es</div></div>
+      <canvas id="cv" width="1542" height="806" style="display:block;width:1100px;height:575px"></canvas>
+      <div id="cliplab" class="chip mono abs" style="left:20px;bottom:20px;background:rgba(15,23,42,.9);color:#fff;font-size:15px;letter-spacing:.08em"></div>
+    </div>
+    <div id="st1" class="stat" style="top:300px"><b id="sv1">0</b><span>vistas completas: feed, data room, mesa y matriz</span></div>
+    <div id="st2" class="stat" style="top:460px"><b id="sv2">0</b><span>tests automáticos en precios y parser .BC3</span></div>
+    <div id="st3" class="stat" style="top:620px"><b>RLS</b><span>ninguna constructora ve la oferta de otra, garantizado en base de datos</span></div>
+    <div id="s7stack" class="label abs" style="left:120px;top:945px;font-size:17px;color:var(--s500)">Next.js 15 · Supabase · Stripe · Inngest · FIEBDC-3 · firma eIDAS</div>
+  </div>
+
+  <!-- S8 · cierre -->
+  <div id="s8" class="scene">
+    <div id="s8logo" class="abs" style="left:0;right:0;top:250px;display:flex;justify-content:center;align-items:center;gap:36px">
+      <svg width="110" height="110" viewBox="0 0 150 150"><rect x="5" y="5" width="140" height="140" fill="none" stroke="#fff" stroke-width="10"/><rect x="52" y="52" width="46" height="46" fill="#fff"/></svg>
+      <div style="font-size:110px;font-weight:600;letter-spacing:.2em;line-height:1">CIMENTA</div>
+    </div>
+    <div id="s8t" class="abs h1" style="left:0;right:0;top:450px;text-align:center;font-size:62px;font-weight:500">Una medición. Todas las ofertas, <span style="color:var(--glow)">comparables.</span></div>
+    <div id="s8cta" class="abs" style="left:0;right:0;top:600px;display:flex;justify-content:center">
+      <div style="display:flex;align-items:center;gap:22px;border:1px solid rgba(148,163,184,.35);border-radius:999px;padding:18px 34px">
+        <span style="font-size:30px;font-weight:500">Buscamos inversores para el piloto.</span>
+        <span class="mono" style="font-size:22px;color:var(--glow)">cimenta.abarceloarquitecto.es</span>
+      </div>
+    </div>
+    <div id="s8by" class="abs" style="left:0;right:0;top:850px;display:flex;justify-content:center;align-items:center;gap:26px">
+      <span class="mono" style="font-size:15px;letter-spacing:.22em;color:var(--s500)">UN PRODUCTO DE</span>
+      <div style="font-family:Poppins,sans-serif;line-height:1.05;text-align:left"><div style="font-size:30px;font-weight:500;color:#fff">A. Barceló</div><div style="font-size:17px;font-weight:300;color:var(--s400)">Arquitecto</div></div>
+    </div>
+  </div>
+
+  <!-- chrome -->
+  <div id="chlogo" class="abs logo" style="left:120px;top:56px;gap:16px">
+    <div class="sq" style="width:34px;height:34px;border-width:3px"><i style="width:11px;height:11px"></i></div>
+    <div class="wm" style="font-size:24px">CIMENTA</div>
+    <div class="mono" style="font-size:13px;letter-spacing:.14em;color:var(--s400);border:1px solid rgba(148,163,184,.35);border-radius:6px;padding:4px 8px">AECO · BETA</div>
+  </div>
+  <div id="chlab" class="abs mono" style="right:120px;top:64px;font-size:18px;letter-spacing:.16em;color:var(--s400);text-align:right"></div>
+  <div class="abs" style="left:0;right:0;bottom:0;height:4px;background:rgba(148,163,184,.12)"><div id="gprog" style="height:100%;background:var(--glow);width:0"></div></div>
+  <div id="fade" class="abs" style="inset:0;background:#000;opacity:0"></div>
+</div>
+
+<script>
+const D = 58;                         // duración total (s)
+const $ = id => document.getElementById(id);
+const clamp = (x,a=0,b=1) => Math.min(b,Math.max(a,x));
+const P = (t,s,d) => clamp((t-s)/d);
+const eo = x => 1-Math.pow(1-x,3);
+const eo5 = x => 1-Math.pow(1-x,5);
+const eio = x => x<.5 ? 4*x*x*x : 1-Math.pow(-2*x+2,3)/2;
+const back = x => {const c1=1.4,c3=c1+1;return 1+c3*Math.pow(x-1,3)+c1*Math.pow(x-1,2);};
+const lerp = (a,b,x) => a+(b-a)*x;
+
+function st(el,o,x=0,y=0,s=1,extra=''){
+  if(typeof el==='string') el=$(el);
+  el.style.opacity=o;
+  el.style.transform=`translate(${x}px,${y}px) scale(${s}) ${extra}`;
+  el.style.visibility = o<=0.001 ? 'hidden' : 'visible';
+}
+// aparición estándar: sube y funde
+function inn(el,t,s,d=.6,dy=36){const k=eo(P(t,s,d)); st(el,k,0,(1-k)*dy);}
+// ventana de escena
+function win(t,a,b,fi=.5,fo=.45){return Math.min(eo(P(t,a,fi)),1-eio(P(t,b-fo,fo)));}
+
+function fmt(n,dec=0){
+  const neg=n<0; n=Math.abs(n);
+  let [i,d]=n.toFixed(dec).split('.');
+  i=i.replace(/\B(?=(\d{3})+(?!\d))/g,'.');
+  return (neg?'−':'')+i+(d?','+d:'');
+}
+
+// ---------- construcción ----------
+// S1: presupuestos sueltos
+const DOCS=[
+  {ty:'PDF',c:'#DC2626',nm:'oferta_constructora_v2.pdf',tt:'1.612.400 €',x:80,y:90,r:-9,vx:22,vy:6,z:.85,b:1.5},
+  {ty:'XLS',c:'#059669',nm:'PPTO revisado (3) FINAL.xlsx',tt:'1.548.900 €',x:1420,y:120,r:7,vx:-18,vy:8,z:.95,b:0},
+  {ty:'DOC',c:'#1E40AF',nm:'presupuesto obra nueva.docx',tt:'1.701.250 €',x:1500,y:700,r:-6,vx:-20,vy:-7,z:.9,b:.8},
+  {ty:'PDF',c:'#DC2626',nm:'escaneo_presupuesto_firmado.pdf',tt:'1.389.000 €',x:110,y:720,r:8,vx:20,vy:-8,z:.8,b:2},
+  {ty:'XLS',c:'#059669',nm:'mediciones_propias_B.xlsx',tt:'1.466.120 €',x:760,y:40,r:3,vx:4,vy:12,z:.7,b:3},
+  {ty:'PDF',c:'#DC2626',nm:'oferta sin desglose.pdf',tt:'1.590.000 €',x:820,y:860,r:-4,vx:-6,vy:-12,z:.72,b:3},
+];
+$('docs').innerHTML = DOCS.map((d,i)=>`<div class="doc" id="doc${i}"><div class="ty" style="background:${d.c}">${d.ty}</div><div class="nm">${d.nm}</div>
+<div class="ln" style="top:66px;width:250px"></div><div class="ln" style="top:86px;width:200px"></div><div class="ln" style="top:106px;width:230px"></div>
+<div class="tt">${d.tt}</div><div class="q">¿?</div></div>`).join('');
+const words=(el,txt,style='')=>{$(el).innerHTML=txt.split(' ').map((w,i)=>`<span class="w" id="${el}w${i}" ${style}>${w}</span>`).join(' ');return txt.split(' ').length;};
+const nA=words('s1a','Comparar ofertas de obra');
+$('s1b').innerHTML='<span class="w" id="s1bw0">sigue</span> <span class="w" id="s1bw1">siendo</span> <span class="w" id="s1bw2">un</span> <span class="w" id="s1bw3">ejercicio</span> <span class="w" id="s1bw4">de</span> <span class="w" id="s1bw5" style="color:var(--glow)">fe.</span>';
+
+// S2
+const PCS=[
+  {n:'Constructora A',f:'PDF',p:'312',m:'184 m³',t:'1.612.400 €'},
+  {n:'Constructora B',f:'Excel',p:'287',m:'201 m³',t:'1.548.900 €'},
+  {n:'Constructora C',f:'Papel escaneado',p:'341',m:'176 m³',t:'1.701.250 €'},
+];
+$('pcs').innerHTML=PCS.map((c,i)=>`<div class="pc" id="pc${i}" style="left:${120+i*530}px"><h3>${c.n}</h3>
+<div class="fmt"><span class="chip mono" style="background:rgba(148,163,184,.15);color:var(--s300);font-size:14px">${c.f}</span></div>
+<div style="margin-top:28px">
+<div class="row"><span>Partidas</span><b>${c.p}</b></div>
+<div class="row"><span>Hormigón cimentación</span><b class="hl">${c.m}</b></div>
+<div class="row"><span>Total</span><b>${c.t}</b></div></div></div>`).join('');
+
+// S3 wordmark
+$('s3wm').innerHTML='CIMENTA'.split('').map((c,i)=>`<span class="w" id="wm${i}">${c}</span>`).join('');
+
+// S4 filas medición
+const MED=[
+  ['01.01','Desbroce y limpieza del terreno','m²','520,00'],
+  ['02.03','Hormigón HA-25/B/20/IIa en cimentación','m³','184,00'],
+  ['02.07','Acero corrugado B500S','kg','12.450,00'],
+  ['04.02','Fábrica de ladrillo perforado 24 cm','m²','612,00'],
+  ['06.01','Ventana de aluminio con RPT','ud','18,00'],
+  ['08.04','Sistema SATE EPS grafito 60 mm','m²','436,00'],
+];
+$('s4rows').innerHTML=MED.map((r,i)=>`<tr id="mr${i}"><td class="c">${r[0]}</td><td>${r[1]}</td><td style="color:var(--s500)">${r[2]}</td><td class="n">${r[3]}</td>
+<td><div class="cell" style="border:1px dashed var(--s300);color:var(--s400)">— €</div></td><td><div class="cell t" style="border:1px dashed var(--s300);color:var(--s400)">Obligatoria</div></td></tr>`).join('');
+
+// S5 textos de paso
+const STEPS=[
+  {n:'01 / 05',r:'PROMOTOR',h:'Publica<br>la obra.',p:'Sube la medición en .BC3 y los planos. Cimenta genera una ficha anónima con las métricas clave.',lb:'Publica'},
+  {n:'02 / 05',r:'CONSTRUCTORA',h:'Cupo<br>cerrado.',p:'De 3 a 5 constructoras por obra. Desbloquean el data room con un fee de 500 € reembolsable.',lb:'Desbloquea'},
+  {n:'03 / 05',r:'CONSTRUCTORA',h:'Oferta partida<br>a partida.',p:'Precio unitario y marca comercial en cada partida. No es una subasta a la baja.',lb:'Oferta'},
+  {n:'04 / 05',r:'PROMOTOR',h:'Compara<br>y adjudica.',p:'Matriz automática con alerta de baja temeraria. Contrato con firma digital eIDAS.',lb:'Adjudica'},
+  {n:'05 / 05',r:'AMBOS · ROADMAP',h:'La obra sigue<br>en Cimenta.',p:'Certificaciones mensuales sobre el .BC3, control de marcas y custodia de la fianza.',lb:'Ejecuta'},
+];
+$('stxts').innerHTML=STEPS.map((s,i)=>`<div class="stxt" id="sx${i}"><div><span class="num">${s.n}</span><span class="role">${s.r}</span></div><h2>${s.h}</h2><p>${s.p}</p></div>`).join('');
+$('pbar').innerHTML=STEPS.map((s,i)=>`<div class="seg"><div class="tr"><div class="fl" id="pf${i}"></div></div><div class="lb" id="pl${i}">0${i+1} ${s.lb}</div></div>`).join('');
+
+// paso 2
+const TOKS=[['CA','Construcciones<br>Alfa'],['GB','Grupo Beta<br>Obras'],['CD','Constructora<br>Delta'],['EL','Edificia<br>Levante'],['+','Plaza<br>libre']];
+$('toks').innerHTML=TOKS.map((k,i)=>`<div class="tok" id="tk${i}" style="left:${i*140}px"><div class="cc ${i==4?'free':''}">${k[0]}</div><span>${k[1]}</span></div>`).join('');
+const DR=[['Planos_Ejecucion.pdf','24 hojas · 38 MB'],['Pliego_Condiciones.pdf','112 páginas'],['Mediciones_Ciegas.bc3','412 partidas · FIEBDC-3']];
+$('docrows').innerHTML=DR.map((d,i)=>`<div id="dr${i}" style="display:flex;align-items:center;gap:16px;height:74px;border-bottom:1px solid var(--s100)">
+<div style="width:44px;height:44px;border-radius:10px;background:var(--s100);display:flex;align-items:center;justify-content:center;font:600 12px var(--mono);color:var(--s600)">${d[0].endsWith('bc3')?'BC3':'PDF'}</div>
+<div style="flex:1"><div style="font:500 18px var(--mono);color:var(--ink)">${d[0]}</div><div style="font-size:14px;color:var(--s500)">${d[1]}</div></div>
+<div style="position:relative;width:120px;height:34px"><div id="dl${i}" class="chip abs" style="right:0;background:var(--s100);color:var(--s500)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" style="vertical-align:-1px"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg> Bloqueado</div><div id="du${i}" class="chip abs" style="right:0;background:#ECFDF5;color:#065F46">✓ Acceso</div></div></div>`).join('');
+
+// paso 3
+const BID=[
+  ['01.01','Desbroce y limpieza del terreno','520,00',1.85,962.00,'No exige marca'],
+  ['02.03','Hormigón HA-25/B/20/IIa','184,00',92.40,17001.60,'Holcim · HA-25/B/20'],
+  ['02.07','Acero corrugado B500S','12.450,00',1.12,13944.00,'Celsa · B500S'],
+  ['04.02','Fábrica ladrillo perforado','612,00',38.60,23623.20,'Cerámica Mora · LP24'],
+  ['06.01','Ventana aluminio RPT','18,00',842.00,15156.00,'Cortizo · COR 70'],
+  ['08.04','SATE EPS grafito 60 mm','436,00',58.90,25680.40,'Weber · therm EPS-G'],
+];
+$('bidrows').innerHTML=BID.map((r,i)=>`<tr><td class="c">${r[0]}</td><td style="font-size:17px">${r[1]}</td><td class="n" style="color:var(--s600)">${r[2]}</td>
+<td><div class="cell" id="bp${i}" style="background:var(--s50)"><span id="bpv${i}"></span></div></td><td class="n" id="bi${i}" style="font-weight:600"></td>
+<td><div class="cell t" id="bm${i}" style="background:var(--s50);color:var(--s400)"><span id="bmv${i}">Obligatoria</span></div></td></tr>`).join('');
+
+// paso 4
+const OFF=[['Construcciones Alfa',1417840],['Grupo Beta Obras',1503200],['Constructora Delta',1063040],['Edificia Levante',1523900]];
+$('bars').innerHTML=OFF.map((o,i)=>`<div class="abs" style="left:${i*246}px;bottom:0;width:230px;height:200px">
+<div id="bar${i}" class="abs" style="left:65px;width:100px;bottom:62px;border-radius:8px 8px 0 0;transform-origin:bottom;background:${i==2?'repeating-linear-gradient(45deg,#FCA5A5 0 10px,#FEE2E2 10px 20px)':'var(--s300)'}"></div>
+<div class="abs mono" id="bv${i}" style="left:0;right:0;text-align:center;font-size:14px;font-weight:600;color:var(--s700)">${fmt(o[1])} €</div>
+<div class="abs" style="left:0;right:0;bottom:30px;text-align:center;font-size:15px;color:var(--s600)">${o[0]}</div>
+<div class="abs mono" style="left:0;right:0;bottom:6px;text-align:center;font-size:13px;color:${i==2?'var(--worst)':'var(--s500)'}">${fmt((o[1]/1480000-1)*100,1).replace('.',',')} %</div></div>`).join('');
+const MX=[
+  ['Hormigón HA-25',['92,40','a'],['95,10','r'],['71,20','g'],['94,80','a']],
+  ['Acero B500S',['1,12','g'],['1,19','a'],['0,98','g'],['1,26','r']],
+  ['Ventana aluminio RPT',['842,00','g'],['905,00','a'],['612,00','a'],['960,00','r']],
+  ['SATE EPS grafito',['58,90','a'],['61,40','r'],['44,10','g'],['59,30','a']],
+  ['Fábrica de ladrillo',['38,60','g'],['41,20','a'],['29,80','g'],['43,90','r']],
+];
+$('mxrows').innerHTML=MX.map((r,i)=>`<tr><td>${r[0]}</td>${r.slice(1).map((c,j)=>`<td style="width:170px"><div class="cl ${c[1]}" id="mx${i}_${j}">${c[0]}</div></td>`).join('')}</tr>`).join('');
+
+// paso 5
+const CERT=[6,14,23,33,44,55,62];
+$('cbars').innerHTML=['E','F','M','A','M','J','J','A','S','O'].map((m,i)=>`<div class="abs" style="left:${i*56}px;bottom:0;width:44px;height:280px">
+<div id="cb${i}" class="abs" style="left:0;right:0;bottom:30px;border-radius:6px 6px 0 0;transform-origin:bottom;background:${i<7?'var(--btn)':'var(--s100)'};height:${i<7?CERT[i]*3.6:230}px"></div>
+<div class="abs mono" style="left:0;right:0;bottom:0;text-align:center;font-size:14px;color:var(--s500)">${m}</div></div>`).join('');
+
+// S7 clips
+const CLIPS=['Feed de licitaciones','Data room','Mesa de ofertas','Matriz comparativa'];
+const imgs=[[],[],[],[]];
+const loads=[];
+for(let c=0;c<4;c++)for(let f=1;f<=45;f++){const im=new Image();im.src=`clip/c${c+1}_${String(f).padStart(3,'0')}.jpg`;imgs[c].push(im);loads.push(im.decode().catch(()=>{}));}
+const ctx=$('cv').getContext('2d');
+window.ready=Promise.all([document.fonts.ready,...loads,new Promise(r=>{const i=new Image();i.src='obra.jpg';i.decode().then(r,r);})]);
+
+// ---------- tiempos ----------
+const T={s1:[0,5.4],s2:[5.1,11.2],s3:[10.9,15.3],s4:[15.0,20.6],s5:[20.3,44.4],s6:[44.1,49.3],s7:[49.0,53.9],s8:[53.6,58]};
+const STEP0=20.3, STEPD=4.82;
+const LABELS=[[5.1,'01 · EL PROBLEMA'],[15,'02 · LA IDEA'],[20.3,'03 · CÓMO FUNCIONA'],[44.1,'04 · NEGOCIO'],[49,'05 · PRODUCTO']];
+
+function scene(id,t,fi=.5,fo=.45,drift=0.025){
+  const [a,b]=T[id]; const el=$(id);
+  if(t<a-0.01||t>b+0.01){el.style.display='none';return null;}
+  el.style.display='block';
+  const o=win(t,a,b,fi,fo);
+  const lt=(t-a)/(b-a);
+  el.style.opacity=o;
+  el.style.transform=`scale(${1+drift*lt})`;
+  return t-a;
+}
+
+function render(t){
+  // fondo vivo
+  $('grid').style.transform=`translate(${-(t*9)%80}px,${-(t*5)%80}px)`;
+  $('glow1').style.left=(300+Math.sin(t*.25)*300)+'px';$('glow1').style.top=(-200+Math.cos(t*.2)*160)+'px';
+  $('glow2').style.left=(1100+Math.cos(t*.22)*260)+'px';$('glow2').style.top=(500+Math.sin(t*.18)*180)+'px';
+  $('gprog').style.width=(t/D*100)+'%';
+
+  // chrome
+  const chO=Math.min(eo(P(t,15.2,.6)),1-eio(P(t,53.4,.4)));
+  st('chlogo',chO,0,0);
+  let lab='';for(const [s,l] of LABELS) if(t>=s) lab=l;
+  const lo = t>=5.1 && t<53.6 ? 1 : 0;
+  $('chlab').textContent=lab; $('chlab').style.opacity=lo*Math.min(1,...LABELS.map(([s])=>t>=s?eo(P(t,s,.5)):1));
+
+  // ---- S1
+  let u=scene('s1',t,.3,.6,0.04);
+  if(u!==null){
+    DOCS.forEach((d,i)=>{
+      const k=eo(P(u,0.05*i,1.0)); const out=eio(P(u,4.5,.9));
+      const cx=d.x+170-960, cy=d.y+105-540;
+      const x=d.x+d.vx*u + cx*out*.8, y=d.y+d.vy*u + cy*out*.8;
+      const el=$('doc'+i); el.style.left=x+'px'; el.style.top=y+'px';
+      el.style.opacity=k*.75*(1-out); el.style.filter=`blur(${d.b}px)`;
+      el.style.transform=`rotate(${d.r+u*1.2*(i%2?1:-1)}deg) scale(${d.z*(0.9+.1*k)})`;
+    });
+    inn('s1lab',u,.2,.6);
+    for(let i=0;i<nA;i++) inn('s1aw'+i,u,.45+i*.12,.6,50);
+    for(let i=0;i<6;i++) inn('s1bw'+i,u,1.25+i*.12+(i==5?.35:0),.6,50);
+    const f=eo(P(u,2.7,.6)); $('s1bw5').style.transform+=` scale(${1+.08*Math.sin(f*Math.PI)})`;
+  }
+
+  // ---- S2
+  u=scene('s2',t,.5,.35,0.02);
+  if(u!==null){
+    inn('s2lab',u,.2);
+    const conv=eio(P(u,5.55,.55));
+    PCS.forEach((c,i)=>{
+      const k=eo(P(u,.3+i*.18,.7));
+      const el=$('pc'+i); const dx=(1-k)*60;
+      const cx=(960-235)-(120+i*530);
+      el.style.opacity=k*(1-conv);
+      el.style.transform=`translate(${dx+cx*conv}px,${(1-k)*40}px) scale(${1-conv*.7})`;
+    });
+    [1,2].forEach(i=>{const k=back(P(u,1.5+i*.2,.5));st('neq'+i,clamp(k)*(1-conv),0,0,.4+.6*k);});
+    inn('s2c1',u,2.3,.6,24); inn('s2c2',u,3.0,.6,24);
+    $('s2c1').style.display=$('s2c2').style.display='inline-block';
+  }
+
+  // ---- S3
+  u=scene('s3',t,.3,.5,0.0);
+  if(u!==null){
+    const out=eio(P(u,3.9,.5));
+    $('s3').style.transform=`scale(${1+out*.08})`;
+    $('s3rect').setAttribute('stroke-dashoffset',560*(1-eio(P(u,.15,.8))));
+    const ki=back(P(u,.8,.45)); $('s3in').style.transformOrigin='75px 75px'; $('s3in').style.transform=`scale(${clamp(ki,0,1.3)})`;
+    const r=eo(P(u,.1,1.4)); const rs=10+r*1400; Object.assign($('ring').style,{width:rs+'px',height:rs+'px',left:(960-rs/2)+'px',top:(455-rs/2)+'px',opacity:(1-r)*.8});
+    for(let i=0;i<7;i++){const k=eo(P(u,.7+i*.06,.7));const el=$('wm'+i);el.style.opacity=k;el.style.transform=`translateY(${(1-k)*40}px)`;}
+    $('s3wm').style.letterSpacing=lerp(.34,.2,eo5(P(u,.7,1.3)))+'em';
+    inn('s3sub',u,1.6,.7); inn('s3tag',u,2.1,.7,20);
+  }
+
+  // ---- S4
+  if(!window._s4){window._s4=1;
+    const card=$('s4card'), th=card.querySelectorAll('th'), tbl=card.querySelector('table');
+    const rel=el=>{let x=0,y=0;while(el&&el!==card){x+=el.offsetLeft;y+=el.offsetTop;el=el.offsetParent;}return [x,y];};
+    const [x3,y0]=rel(th[3]), [x4]=rel(th[4]), [x5]=rel(th[5]), th0=rel(tbl)[1], H=tbl.offsetHeight;
+    Object.assign($('s4mc').style,{left:x3+'px',width:th[3].offsetWidth+'px',top:th0+'px',height:H+'px'});
+    Object.assign($('s4hl').style,{left:(x4-6)+'px',width:(x5+th[5].offsetWidth-x4+12)+'px',top:(th0-6)+'px',height:(H+12)+'px'});
+    Object.assign($('s4hlt').style,{left:(x4-6)+'px',top:(th0+H+18)+'px'});
+  }
+  u=scene('s4',t,.45,.45,0.02);
+  if(u!==null){
+    inn('s4lab',u,.1); inn('s4a',u,.25,.7,50); inn('s4b',u,.7,.7,50); inn('s4p',u,3.2,.7,24);
+    const kc=eo(P(u,.5,.8)); st('s4card',kc,(1-kc)*120,0);
+    inn('s4file',u,.9,.5,14);
+    MED.forEach((r,i)=>inn('mr'+i,u,1.1+i*.12,.5,18));
+    const ml=eo(P(u,2.1,.5)); st('s4mc',ml,0,0,1); inn('s4lock',u,2.1,.5,14);
+    const hl=back(P(u,2.7,.6)); st('s4hl',clamp(hl),0,0,.96+.04*hl);
+    inn('s4hlt',u,2.9,.5,14);
+  }
+
+  // ---- S5 pasos
+  u=scene('s5',t,.45,.45,0.0);
+  if(u!==null){
+    const si=Math.min(4,Math.floor(u/STEPD));
+    STEPS.forEach((s,i)=>{
+      const a=i*STEPD, b=a+STEPD;
+      const ki=i==0?eo(P(u,.1,.6)):eo(P(u,a,.6));
+      const ko=i==4?0:eio(P(u,b-.35,.35));
+      const o=Math.min(ki,1-ko);
+      const el=$('sx'+i); el.style.opacity=o; el.style.visibility=o>0?'visible':'hidden';
+      el.style.transform=`translateY(${(1-ki)*40 - ko*30}px)`;
+      $('pf'+i).style.width=(clamp((u-a)/STEPD)*100)+'%';
+      $('pl'+i).style.color = (u>=a && u<b) ? '#fff' : 'var(--s500)';
+      const v=$('v'+(i+1));
+      const vo=Math.min(i==0?eo(P(u,.2,.7)):eo(P(u,a+.05,.6)), 1-(i==4?0:eio(P(u,b-.4,.4))));
+      v.style.display=vo>0?'block':'none'; v.style.opacity=vo;
+      v.style.transform=`translateX(${(1-(i==0?eo(P(u,.2,.7)):eo(P(u,a+.05,.6))))*140 - (i==4?0:eio(P(u,b-.4,.4)))*140}px)`;
+    });
+    inn('pbar',u,.3,.6,20);
+
+    // v1
+    let w=u;
+    const kc=eo(P(w,.25,.7)); st('tc',kc,0,(1-kc)*50);
+    const ci=eio(P(w,.35,.8)); $('tcimg').style.clipPath=`inset(0 ${(1-ci)*100}% 0 0)`;
+    const cnt=eo(P(w,.8,1.3));
+    $('m1').textContent=fmt(1480000*cnt)+' €'; $('m2').textContent=fmt(1190*cnt)+' m²'; $('m3').textContent=fmt(1244*cnt)+' €/m²';
+    document.querySelectorAll('#tcslots u').forEach((e,i)=>{e.style.transform=`scaleX(${i==0?eo(P(w,1.6,.5)):0})`;});
+    const kb=eo(P(w,1.8,.5)); st('tcbtn',kb,0,(1-kb)*10);
+    [1,2,3].forEach(i=>{const k=eo(P(w,2.0+i*.3,.6)); st('co'+i,k,(1-k)*30,0); $('co'+i).querySelector('.ln').style.transform=`scaleX(${k})`;});
+
+    // v2
+    w=u-STEPD;
+    TOKS.forEach((k,i)=>{const q=back(P(w,.4+i*.22,.45)); st('tk'+i,clamp(q),0,(1-clamp(q))*20,.6+.4*q);});
+    const pr=eo(P(w,1.2,.8)); st('prob',pr,0,(1-pr)*20);
+    inn('v2top',w,.1,.5,20); inn('v2fee',w,.5,.6,30); inn('v2docs',w,.7,.6,30);
+    const press=P(w,2.5,.25); const pressed=w>=2.75;
+    $('v2btn').style.transform=`scale(${1-.05*Math.sin(press*Math.PI)})`;
+    $('v2btn').style.background=pressed?'var(--best)':'var(--btn)';
+    $('v2btn').textContent=pressed?'✓ Data room desbloqueado':'Pagar 500 € y desbloquear';
+    DR.forEach((d,i)=>{const k=eo(P(w,2.85+i*.15,.35)); st('dl'+i,1-k,0,0); st('du'+i,k,0,0,.8+.2*k); inn('dr'+i,w,.9+i*.12,.5,14);});
+    inn('wmk',w,3.3,.5,12);
+
+    // v3
+    w=u-2*STEPD;
+    inn('bidcard',w,.05,.5,30);
+    inn('bcchip',w,.45,.5,10);
+    let tot=0;
+    BID.forEach((r,i)=>{
+      const s=.75+i*.36; const typ=P(w,s,.28);
+      const str=fmt(r[3],2); const nch=Math.round(str.length*typ);
+      $('bpv'+i).textContent = nch>0 ? str.slice(0,nch) : '';
+      const active = w>=s && w<s+.36;
+      $('bp'+i).style.boxShadow = active ? 'inset 0 0 0 2px #3B5BDB' : 'none';
+      $('bp'+i).style.background = active ? '#EFF3FF' : 'var(--s50)';
+      const ki=eo(P(w,s+.25,.3)); $('bi'+i).textContent = ki>0 ? fmt(r[4],2)+' €' : ''; $('bi'+i).style.opacity=ki;
+      const km=P(w,s+.15,.25); $('bmv'+i).textContent = km>0 ? r[5] : 'Obligatoria';
+      $('bm'+i).style.color = km>0 ? (i==0?'var(--s400)':'var(--ink)') : 'var(--s400)';
+      $('bm'+i).style.background = km>0 && i>0 ? '#F0FDF4' : 'var(--s50)';
+    });
+    const tk=eio(P(w,.8,2.6)); $('btot').textContent=fmt(1417840*tk,2)+' €';
+    const dv=back(P(w,3.4,.45)); st('bdev',clamp(dv),0,0,.7+.3*dv);
+    const sv=eo(P(w,3.7,.4)); st('bsend',sv,(1-sv)*20,0);
+
+    // v4
+    w=u-3*STEPD;
+    inn('mxcard',w,.05,.5,30);
+    OFF.forEach((o,i)=>{const k=eo(P(w,.3+i*.1,.8)); const h=(o[1]-800000)/(1600000-800000)*130;
+      const b=$('bar'+i); b.style.height=h+'px'; b.style.transform=`scaleY(${k})`;
+      $('bv'+i).style.bottom=(62+h*k+8)+'px'; $('bv'+i).style.opacity=k;
+      if(i==0) b.style.background = w>2.9 ? 'var(--best)' : 'var(--s300)';
+    });
+    MX.forEach((r,i)=>r.slice(1).forEach((c,j)=>{const k=back(P(w,.9+i*.08+j*.05,.4)); st(`mx${i}_${j}`,clamp(k),0,0,.7+.3*k);}));
+    const al=eo(P(w,1.9,.5)); st('alert',al,0,(1-al)*14); $('alert').style.boxShadow= w>1.9&&w<2.8 ? `0 0 0 ${3*Math.abs(Math.sin((w-1.9)*7))}px rgba(220,38,38,.35)` : 'none';
+    const aw=eo(P(w,2.3,.5)); const ap=P(w,2.75,.25);
+    st('award',aw,0,(1-aw)*14,1-.04*Math.sin(ap*Math.PI));
+    const ct=eo5(P(w,3.0,.6)); st('contract',ct,0,(1-ct)*80,.92+.08*ct);
+    const sg=back(P(w,3.45,.4)); st('sig',clamp(sg),0,0,.6+.4*sg);
+    inn('refund',w,3.75,.4,10);
+
+    // v5
+    w=u-4*STEPD;
+    inn('certcard',w,.1,.6,30); inn('fzcard',w,.3,.6,30); inn('mkcard',w,.45,.6,30);
+    CERT.forEach((c,i)=>{$('cb'+i).style.transform=`scaleY(${eo(P(w,.5+i*.16,.5))})`;});
+    for(let i=7;i<10;i++) $('cb'+i).style.opacity=eo(P(w,.5,.5))*.8;
+    const cp=Math.round(62*eo(P(w,.5,1.6))); $('cpct').textContent=cp+' %';
+    $('fz').textContent=fmt(70892*eo(P(w,.6,1.4)),2)+' €';
+    const mk=Math.round(38*eo(P(w,.8,1.8))); $('mk').textContent=mk+' / 38'; $('mkb').style.width=(mk/38*100)+'%';
+    inn('cval',w,1.9,.5,14);
+  }
+
+  // ---- S6
+  u=scene('s6',t,.45,.45,0.02);
+  if(u!==null){
+    inn('s6lab',u,.1); inn('s6h',u,.25,.7,40);
+    [1,2,3].forEach(i=>inn('mc'+i,u,.8+i*.22,.7,50));
+    const fl=eio(P(u,2.0,1.4)); $('flowl').style.transform=`scaleX(${fl})`;
+    [1,2,3].forEach(i=>{const k=back(P(u,2.0+(i-1)*.6,.45)); st('fn'+i,clamp(k),0,0,.8+.2*k);});
+  }
+
+  // ---- S7
+  u=scene('s7',t,.45,.4,0.015);
+  if(u!==null){
+    inn('s7lab',u,.1); inn('s7h',u,.25,.7,40);
+    const kb=eo(P(u,.5,.8)); st('browser',kb,0,(1-kb)*60,.96+.04*kb);
+    const cu=Math.max(0,u-.5); const ci=Math.min(3,Math.floor(cu/1.1)); const fi=Math.min(44,Math.floor((cu-ci*1.1)*30));
+    const im=imgs[ci][fi]; if(im&&im.complete) ctx.drawImage(im,0,0,1542,806);
+    $('cliplab').textContent=CLIPS[ci];
+    const s1=eo(P(u,1.0,1.2)); inn('st1',u,.9,.6,30); $('sv1').textContent=Math.round(4*s1);
+    const s2=eo(P(u,1.3,1.4)); inn('st2',u,1.2,.6,30); $('sv2').textContent=Math.round(42*s2);
+    inn('st3',u,1.5,.6,30); inn('s7stack',u,2.0,.6,14);
+  }
+
+  // ---- S8
+  u=scene('s8',t,.5,.01,0.03);
+  if(u!==null){
+    const kl=eo5(P(u,.1,.9)); st('s8logo',kl,0,(1-kl)*30,.9+.1*kl);
+    inn('s8t',u,.7,.7,30); inn('s8cta',u,1.3,.7,24); inn('s8by',u,1.9,.7,14);
+  }
+  $('fade').style.opacity=eio(P(t,57.5,.5))*.0 + eio(P(t,0,0))*0 + (1-eo(P(t,0,.35)));
+}
+window.render=render;
+render(0);
+</script>
+</body>
+</html>
